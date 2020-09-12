@@ -1,0 +1,14 @@
+{
+  "contracts": {},
+  "solidityLibs": {},
+  "proxies": {
+    "crowdsale-v1/OWLToken": [
+      {
+        "address": "0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab",
+        "kind": "NonProxy",
+        "bytecodeHash": "5ad45d9d5e46fdad5805909e8406b91e0774f62c43f879e0f04afee331b2a813"
+      }
+    ]
+  },
+  "manifestVersion": "2.2"
+}
