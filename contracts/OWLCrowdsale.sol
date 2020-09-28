@@ -18,7 +18,7 @@ contract OWLCrowdsale is Crowdsale, CappedCrowdsale, AllowanceCrowdsale {
     uint256 public investorMinCap = 0.1 ether;
 	uint256 public investorHardCap = 50 ether;
 
-    uint256 public _hardCap = 8500 ether;
+    uint256 public _hardCap = 3000 ether;
     uint256 public _exchangeRate = 600;
 
 	mapping(address => uint256) private _contributions;
