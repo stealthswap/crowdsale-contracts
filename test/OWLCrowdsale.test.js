@@ -7,20 +7,21 @@ const { BN, balance, ether, expectRevert } = require('@openzeppelin/test-helpers
 
 describe('OWLCrowdsale', function () {
 
-    // 2690 ether
     const cap = ether('2690');
     const crowdsaleAllowance = ether('2620060');
     const minContribution = ether('0.5');
     const maxContribution = ether('75');
-    const rate = ether('974');
-    const openingTime = new BN (1601935200);
-    const closingTime = new BN (1602194400);
+
+    const testValue = ether('25');
+    const rate = new BN('974');
+
+
     const [ investor, wallet, purchaser, tokenWallet, investor1, purchaser1, investor2 ] = accounts;
     beforeEach(async function () {
         // Deploy a new Token contract for each test
         this.contract = await Token.new({ from: tokenWallet });
         // Deploy a new Crowdsale contract for each test
-        this.crowdsale = await Crowdsale.new(openingTime,closingTime,rate,this.contract.address,wallet,tokenWallet);
+        this.crowdsale = await Crowdsale.new(rate,wallet,this.contract.address,tokenWallet);
         await this.contract.approve(this.crowdsale.address, crowdsaleAllowance, {from: tokenWallet});
     });
     it('should have an allowance of 2.6M Token ', async function () {
@@ -40,7 +41,13 @@ describe('OWLCrowdsale', function () {
             await this.crowdsale.buyTokens(investor, { value: maxContribution, from: purchaser });
             await this.crowdsale.buyTokens(investor1, { value: minContribution, from: purchaser1 });
           });
+          it('should have token wallet', async function () {
+            expect(await this.crowdsale.tokenWallet()).to.equal(tokenWallet);
+          });
 
+          it('should accept sends', async function () {
+            await this.crowdsale.send(testValue);
+          });
         it('should reject payments outside cap', async function () {
           await expectRevert(this.crowdsale.send(cap), 'CappedCrowdsale: individual cap exceeded');
         });
@@ -61,5 +68,13 @@ describe('OWLCrowdsale', function () {
           expect(await balanceTracker.delta()).to.be.bignumber.equal(minContribution);
         });
     })
+    describe('check remaining allowance', function () {
+      it('should report correct allowance left', async function () {
+        const expectedTokenAmount = rate.mul(testValue)
+        const remainingAllowance = crowdsaleAllowance.sub(expectedTokenAmount);
+        await this.crowdsale.buyTokens(investor, { value: testValue, from: purchaser });
+        expect(await this.crowdsale.remainingTokens()).to.be.bignumber.equal(remainingAllowance);
+      });
+    });
 
 })

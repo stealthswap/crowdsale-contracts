@@ -52,6 +52,26 @@ describe('OWLToken', function () {
         expect(receiverBalanceAfter.toString()).equal(finalBalanceReceiver);
 
     })
+    it('can transfer allowed tokens', async function() {
+
+        const amountToTransfer = '5000000000000000000000000';
+        const expectedFinalSupply = '10000000000000000000000000';
+
+        await this.contract.approve(receiver, new BN(amountToTransfer), {from: owner});
+
+
+        this.contract.transferFrom(owner, receiver, new BN(amountToTransfer), { from: receiver });
+
+
+        const ownerBalance = await this.contract.balanceOf(owner);
+
+        expect(ownerBalance.toString()).equal(amountToTransfer);
+
+        const finalSupply = await this.contract.totalSupply();
+
+        expect(finalSupply.toString()).equal(expectedFinalSupply);
+
+    })
     it('only owner should be pauser', async function () {
         const isOwnerPauser = await this.contract.isPauser(owner);
         expect(isOwnerPauser.toString()).equal('true');

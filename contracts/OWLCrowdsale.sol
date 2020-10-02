@@ -16,13 +16,10 @@ contract OWLCrowdsale is Crowdsale, CappedCrowdsale, AllowanceCrowdsale {
     using SafeERC20 for IERC20;
 
     uint256 public investorMinCap = 0.5 ether;
-	uint256 public investorHardCap = 75 ether;
+	  uint256 public investorHardCap = 75 ether;
 
     uint256 public _hardCap = 2690 ether;
-    uint256 public _exchangeRate = 974; // 1 OWL = 0.001026717557 ether
-
-    uint256 public _launchTime = 1601935200; // Monday, October 5, 2020 10:00:00 PM
-    uint256 public _endTime = 1602194400; // Thursday, October 8, 2020 10:00:00 PM
+    uint256 public _exchangeRate = 974;
 
 	mapping(address => uint256) private _contributions;
 
