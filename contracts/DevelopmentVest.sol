@@ -1,4 +1,4 @@
-pragma solidity ^0.6.2;
+pragma solidity ^0.5.0;
 
 // import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol";
 // import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/SafeERC20.sol";
@@ -9,21 +9,21 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 // Dev addresses respectively distributed 25%, 33.5%, 33.5% of 250,000 tokens quarterly
 contract DevelopmentVesting {
-    
+
     using SafeMath for uint;
-    
+
     IERC20 private Token;
 
     mapping(address => uint256) private devShares;
-    
-    address private dev1; 
+
+    address private dev1;
     address private dev2;
     address private dev3;
-    
+
     uint256 public timer;
-    
+
     constructor(IERC20 _Token, address _dev1, address _dev2, address _dev3) public {
-        timer = now - 4 days; 
+        timer = now - 4 days;
         Token = _Token;
         dev1 = _dev1;
         dev2 = _dev2;

@@ -7,31 +7,28 @@ const { BN, balance, ether, expectRevert } = require('@openzeppelin/test-helpers
 
 describe('OWLCrowdsale', function () {
 
-    // 8500 ether
-    const cap = ether('8500');
-    const crowdsaleAllowance = new BN('3000000000000000000000000');
-    const minContribution = ether('0.1');
-    const maxContribution = ether('50');
-    const rate = new BN('600');
-
+    // 2690 ether
+    const cap = ether('2690');
+    const crowdsaleAllowance = ether('2620060');
+    const minContribution = ether('0.5');
+    const maxContribution = ether('75');
+    const rate = new BN('974');
+    const openingTime = new BN (1601935200);
+    const closingTime = new BN (1602194400);
     const [ investor, wallet, purchaser, tokenWallet, investor1, purchaser1, investor2 ] = accounts;
-
-    beforeEach(async function () {
+    before(async function () {
         // Deploy a new Token contract for each test
         this.contract = await Token.new({ from: tokenWallet });
         // Deploy a new Crowdsale contract for each test
-        this.crowdsale = await Crowdsale.new(rate,wallet,this.contract.address,tokenWallet);
+        this.crowdsale = await Crowdsale.new(openingTime,closingTime,rate,this.contract.address,wallet,tokenWallet);
         await this.contract.approve(this.crowdsale.address, new BN(crowdsaleAllowance), {from: tokenWallet});
-
-
     });
-    it('should have an allowance of 3M Token ', async function () {
-        const expectedAllowance = '3000000000000000000000000';
+    it('should have an allowance of 2.6M Token ', async function () {
+        const expectedAllowance = '2620060000000000000000000';
         const allowance = await this.contract.allowance(tokenWallet,this.crowdsale.address);
         // Test if the returned value is the same one
         // Note that we need to use strings to compare the 256 bit integers
-        expect(allowance.toString()).equal(expectedAllowance);
-
+        expect(allowance.toString()).equal(expectedAllowance)
     });
 
     it('should be hardcapped', async function () {

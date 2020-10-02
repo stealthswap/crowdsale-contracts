@@ -11,6 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Capped.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Pausable.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 
 
 contract OWLToken is ERC20, ERC20Detailed, ERC20Burnable, ERC20Capped, ERC20Pausable {
