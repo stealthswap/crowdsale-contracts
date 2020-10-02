@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/crowdsale/emission/AllowanceCrowdsale.sol";
 import "@openzeppelin/contracts/crowdsale/validation/CappedCrowdsale.sol";
 import "@openzeppelin/contracts/crowdsale/validation/IndividuallyCappedCrowdsale.sol";
 import "@openzeppelin/contracts/crowdsale/validation/TimedCrowdsale.sol";
-
+import "@openzeppelin/contracts/crowdsale/distribution/FinalizableCrowdsale.sol";
 
 /// @title OWLCrowdsale is Timed Capped Crowdsale smart contract.
 /// @author StealthSwap
@@ -16,7 +16,7 @@ contract OWLCrowdsale is Crowdsale, CappedCrowdsale, AllowanceCrowdsale {
     using SafeERC20 for IERC20;
 
     uint256 public investorMinCap = 0.5 ether;
-	uint256 public investorHardCap = 75 ether;
+	  uint256 public investorHardCap = 75 ether;
 
     uint256 public _hardCap = 2690 ether;
     uint256 public _exchangeRate = 974;
@@ -24,14 +24,19 @@ contract OWLCrowdsale is Crowdsale, CappedCrowdsale, AllowanceCrowdsale {
 	mapping(address => uint256) private _contributions;
 
     constructor(
-        uint256 rate,
-        address payable wallet,
+        uint256 _openingTime,
+        uint256 _closingTime,
+        uint256 _rate,
         IERC20 token,
-        address crowdsaleWallet  // <- new argument
+        address crowdsaleWallet, // <- new argument
+        address payable wallet
     )
-        Crowdsale(rate, wallet, token)
+        Crowdsale(_rate, wallet, token)
         CappedCrowdsale(_hardCap)
         AllowanceCrowdsale(crowdsaleWallet)  // <- used here
+        // TimedCrowdsale(_openingTime,_closingTime)
+        // FinalizableCrowdsale()
+
         public
     {
 

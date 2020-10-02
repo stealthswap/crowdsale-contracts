@@ -11,10 +11,11 @@ import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Capped.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Pausable.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 
 
 contract OWLToken is ERC20, ERC20Detailed, ERC20Burnable, ERC20Capped, ERC20Pausable {
-
+    // 10M Tokens
     uint256 constant maxSupply = 10000000 * 1 ether;
 
     constructor() public ERC20Detailed("OWL Token", "OWL", 18) ERC20Capped(maxSupply) {
