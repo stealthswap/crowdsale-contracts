@@ -12,16 +12,16 @@ describe('OWLCrowdsale', function () {
     const crowdsaleAllowance = ether('2620060');
     const minContribution = ether('0.5');
     const maxContribution = ether('75');
-    const rate = new BN('974');
+    const rate = ether('974');
     const openingTime = new BN (1601935200);
     const closingTime = new BN (1602194400);
     const [ investor, wallet, purchaser, tokenWallet, investor1, purchaser1, investor2 ] = accounts;
-    before(async function () {
+    beforeEach(async function () {
         // Deploy a new Token contract for each test
         this.contract = await Token.new({ from: tokenWallet });
         // Deploy a new Crowdsale contract for each test
         this.crowdsale = await Crowdsale.new(openingTime,closingTime,rate,this.contract.address,wallet,tokenWallet);
-        await this.contract.approve(this.crowdsale.address, new BN(crowdsaleAllowance), {from: tokenWallet});
+        await this.contract.approve(this.crowdsale.address, crowdsaleAllowance, {from: tokenWallet});
     });
     it('should have an allowance of 2.6M Token ', async function () {
         const expectedAllowance = '2620060000000000000000000';
