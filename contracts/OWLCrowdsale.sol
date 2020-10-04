@@ -1,45 +1,25 @@
-// SPDX-License-Identifier: GPLv3
-
 pragma solidity ^0.5.0;
-import "@openzeppelin/contracts/crowdsale/Crowdsale.sol";
-import "@openzeppelin/contracts/crowdsale/emission/AllowanceCrowdsale.sol";
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/crowdsale/validation/CappedCrowdsale.sol";
-import "@openzeppelin/contracts/crowdsale/validation/IndividuallyCappedCrowdsale.sol";
-import "@openzeppelin/contracts/crowdsale/validation/TimedCrowdsale.sol";
-import "@openzeppelin/contracts/crowdsale/distribution/FinalizableCrowdsale.sol";
+import "@openzeppelin/contracts/crowdsale/distribution/PostDeliveryCrowdsale.sol";
 
-/// @title OWLCrowdsale is Timed Capped Crowdsale smart contract.
-/// @author StealthSwap
-/// @notice Token is Detailed ERC20 with Capped Supply.
-contract OWLCrowdsale is Crowdsale, CappedCrowdsale, AllowanceCrowdsale {
-
-    using SafeERC20 for IERC20;
+contract OWLCrowdsale is CappedCrowdsale, PostDeliveryCrowdsale {
 
     uint256 public investorMinCap = 0.5 ether;
-	  uint256 public investorHardCap = 75 ether;
+    uint256 public investorHardCap = 75 ether;
 
     uint256 public _hardCap = 2690 ether;
     uint256 public _exchangeRate = 974;
 
 	mapping(address => uint256) private _contributions;
-
-    constructor(
-        uint256 _openingTime,
-        uint256 _closingTime,
-        uint256 _rate,
-        IERC20 token,
-        address crowdsaleWallet, // <- new argument
-        address payable wallet
-    )
-        Crowdsale(_rate, wallet, token)
-        CappedCrowdsale(_hardCap)
-        AllowanceCrowdsale(crowdsaleWallet)  // <- used here
-        // TimedCrowdsale(_openingTime,_closingTime)
-        // FinalizableCrowdsale()
-
+    constructor (uint256 openingTime, uint256 closingTime, uint256 rate, address payable wallet, IERC20 token)
         public
+        TimedCrowdsale(openingTime, closingTime)
+        Crowdsale(rate, wallet, token)
+        CappedCrowdsale(_hardCap)
     {
-
+        // solhint-disable-previous-line no-empty-blocks
     }
     function _updatePurchasingState(address _beneficiary, uint256 weiAmount) internal {
         // solhint-disable-previous-line no-empty-blocks
