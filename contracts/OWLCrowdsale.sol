@@ -74,7 +74,7 @@ contract OWLCrowdsale is CappedCrowdsale, PostDeliveryCrowdsale {
         // Quantity of ETH to add
         uint256 amountEthForUniswap = 1047 ether;
         // Quantity of OWL to add
-        uint256 amountOwlForUniswap = 1000000000;
+        uint256 amountOwlForUniswap = 1000000000 ether;
 
         // Send liquidity to Uniswap LP to create OWL/WETH pair
         owlToken.approve(address(uniswapRouter), amountOwlForUniswap);
