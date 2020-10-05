@@ -1,0 +1,26 @@
+{
+  "contracts": {},
+  "solidityLibs": {},
+  "proxies": {
+    "crowdsale-v1/StealthSwapCrowdsale": [
+      {
+        "address": "0xD92eC35BF2024F59E398818ef836db788f9A25DE",
+        "kind": "NonProxy",
+        "bytecodeHash": "a3519b3a4164fa8906ad4e0afd1fe543f1505cdb674b2f1640975a6f24ba3ee6"
+      },
+      {
+        "address": "0xBf418F6161527801B0D6471eCee43F9e390453Ae",
+        "kind": "NonProxy",
+        "bytecodeHash": "a3519b3a4164fa8906ad4e0afd1fe543f1505cdb674b2f1640975a6f24ba3ee6"
+      }
+    ],
+    "crowdsale-v1/OWLToken": [
+      {
+        "address": "0xBCc90471412CaeFC8b0cF9dA7462aa4beFc2a56b",
+        "kind": "NonProxy",
+        "bytecodeHash": "d1cbe71a5399ee256a0284ed7b1d726559ccc310f743b0464b0606151b016aa0"
+      }
+    ]
+  },
+  "manifestVersion": "2.2"
+}

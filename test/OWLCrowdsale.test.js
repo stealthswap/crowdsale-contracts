@@ -4,7 +4,7 @@ const { BN, balance, ether, expectRevert, time } = require('@openzeppelin/test-h
 
 const { expect } = require('chai');
 
-const Crowdsale = contract.fromArtifact('OWLCrowdsale');
+const Crowdsale = contract.fromArtifact('StealthSwapCrowdsale');
 const Token = contract.fromArtifact('OWLToken');
 
 describe('OWLCrowdsale', function () {
@@ -17,6 +17,7 @@ describe('OWLCrowdsale', function () {
   const crowdsaleAllowance = ether('2620060');
   const minContribution = ether('0.5');
   const maxContribution = ether('75');
+  console.log(rate.toString());
   before(async function () {
     // Advance to the next block to correctly read time in the solidity "now" function interpreted by ganache
     await time.advanceBlock();
@@ -92,7 +93,7 @@ describe('OWLCrowdsale', function () {
           'PostDeliveryCrowdsale: not closed'
         );
       });
-      it('should stop at reached cap', async function (){
+      it('should stop and allow withdrawals after at reached cap', async function (){
         const _buyers = accounts.slice(30,298);
         const _amount = ether('10');
         for (let i = 0;i < _buyers.length; i++) {
@@ -104,10 +105,41 @@ describe('OWLCrowdsale', function () {
         const crowdsaleBalance = await this.token.balanceOf(this.crowdsale.address);
         expect(crowdsaleBalance.toString()).to.equal('0');
         expect(hasCapped).to.equal(true);
+
+        const hasFinalized = await this.crowdsale.finalized();
+        expect(hasFinalized).to.equal(false);
+
+        await this.crowdsale.finalize();
+        for (let i = 0;i < _buyers.length; i++) {
+          _buyer = _buyers[i];
+          await this.crowdsale.withdrawTokens(_buyer, { from: _buyer});
+        }
+
       })
-      context('after closing time', function () {
+      context('after closing time not finalized', function () {
         beforeEach(async function () {
           await time.increaseTo(this.afterClosingTime);
+        });
+
+        it('should prevent beneficiaries to withdraw tokens if not finalized', async function () {
+          await expectRevert(this.crowdsale.withdrawTokens(investor),
+          'PostDeliveryCrowdsale: not finalized.'
+        );
+          expect(await this.token.balanceOf(investor)).to.be.bignumber.equal('0');
+          expect(await this.crowdsale.balanceOf(investor)).to.be.bignumber.equal(value.mul(rate));
+        });
+
+        it('rejects withdrawals', async function () {
+          await expectRevert(this.crowdsale.withdrawTokens(investor),
+          'PostDeliveryCrowdsale: not finalized.'
+          );
+        });
+      });
+      context('after closing time and finalized', function () {
+        beforeEach(async function () {
+          await time.increaseTo(this.afterClosingTime);
+          await this.crowdsale.finalize();
+
         });
 
         it('allows beneficiaries to withdraw tokens', async function () {
