@@ -1,6 +1,6 @@
 const { accounts, contract } = require('@openzeppelin/test-environment');
 
-const { BN, ether, expectRevert, time } = require('@openzeppelin/test-helpers');
+const { BN, balance, ether, expectRevert, time } = require('@openzeppelin/test-helpers');
 
 const { expect } = require('chai');
 
@@ -8,6 +8,8 @@ const Crowdsale = contract.fromArtifact('OWLCrowdsale');
 const Token = contract.fromArtifact('OWLToken');
 
 describe('OWLCrowdsale', function () {
+  this.timeout(0);
+
   const [ investor, wallet, purchaser, investor1, purchaser1 ] = accounts;
 
   const cap = ether('2690');
@@ -30,18 +32,31 @@ describe('OWLCrowdsale', function () {
     );
     await this.token.transfer(this.crowdsale.address, crowdsaleAllowance);
   });
-  it('should have an allowance of 2.6M Token ', async function () {
+  it('should have a balance of 2.6M Token ', async function () {
     const expectedAllowance = '2620060000000000000000000';
-    const allowance = await this.token.balanceOf(this.crowdsale.address);
+    const balance = await this.token.balanceOf(this.crowdsale.address);
     // Test if the returned value is the same one
     // Note that we need to use strings to compare the 256 bit integers
-    expect(allowance.toString()).equal(expectedAllowance)
+    expect(balance.toString()).equal(expectedAllowance)
 });
 
-it('should be hardcapped', async function () {
-    const crowdsaleCap = await this.crowdsale.cap();
-    expect(crowdsaleCap.toString()).equal(cap.toString());
-})
+  it('should be hardcapped', async function () {
+      const crowdsaleCap = await this.crowdsale.cap();
+      expect(crowdsaleCap.toString()).equal(cap.toString());
+  })
+
+  it('should have proper arguments', async function() {
+    const _rate = await this.crowdsale.rate();
+    const _token = await this.crowdsale.token();
+    const _wallet = await this.crowdsale.wallet();
+
+    expect(_rate.toString()).equal(rate.toString());
+    expect(_token).to.equal(this.token.address);
+    expect(_wallet).to.equal(wallet);
+
+    const _walletBalance = await balance.current(_wallet);
+    expect(_walletBalance.toString()).to.equal(ether('1000').toString());
+  })
   context('after opening time', function () {
     const value = ether('42');
 
@@ -62,7 +77,7 @@ it('should be hardcapped', async function () {
       await expectRevert(this.crowdsale.send(cap.addn(1)), 'CappedCrowdsale: cap exceeded');
     });
     context('with bought tokens', function () {
-      const value = ether('42');
+      const value = ether('10');
 
       beforeEach(async function () {
         await this.crowdsale.buyTokens(investor, { value: value, from: purchaser });
@@ -77,7 +92,19 @@ it('should be hardcapped', async function () {
           'PostDeliveryCrowdsale: not closed'
         );
       });
+      it('should stop at reached cap', async function (){
+        const _buyers = accounts.slice(30,298);
+        const _amount = ether('10');
+        for (let i = 0;i < _buyers.length; i++) {
+          _buyer = _buyers[i];
+          await this.crowdsale.buyTokens(_buyer, { value: _amount, from: _buyer});
+        }
 
+        const hasCapped = await this.crowdsale.capReached();
+        const crowdsaleBalance = await this.token.balanceOf(this.crowdsale.address);
+        expect(crowdsaleBalance.toString()).to.equal('0');
+        expect(hasCapped).to.equal(true);
+      })
       context('after closing time', function () {
         beforeEach(async function () {
           await time.increaseTo(this.afterClosingTime);

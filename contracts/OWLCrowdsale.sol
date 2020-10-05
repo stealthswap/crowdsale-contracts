@@ -3,8 +3,9 @@ pragma solidity ^0.5.0;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/crowdsale/validation/CappedCrowdsale.sol";
 import "@openzeppelin/contracts/crowdsale/distribution/PostDeliveryCrowdsale.sol";
+import "@openzeppelin/contracts/crowdsale/distribution/FinalizableCrowdsale.sol";
 
-contract OWLCrowdsale is CappedCrowdsale, PostDeliveryCrowdsale {
+contract OWLCrowdsale is CappedCrowdsale, PostDeliveryCrowdsale, FinalizableCrowdsale {
 
     uint256 public investorMinCap = 0.5 ether;
     uint256 public investorHardCap = 75 ether;
