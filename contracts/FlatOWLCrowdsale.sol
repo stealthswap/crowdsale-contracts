@@ -547,11 +547,6 @@ contract Ownable is Context {
 
 pragma solidity ^0.5.0;
 
-
-
-
-
-
 /**
  * @title Crowdsale
  * @dev Crowdsale is a base contract for managing a token crowdsale,
@@ -800,8 +795,6 @@ contract CappedCrowdsale is Crowdsale {
 // File: @openzeppelin/contracts/crowdsale/validation/TimedCrowdsale.sol
 
 pragma solidity ^0.5.0;
-
-
 
 /**
  * @title TimedCrowdsale

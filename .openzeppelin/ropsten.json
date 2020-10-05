@@ -12,6 +12,16 @@
         "address": "0xBf418F6161527801B0D6471eCee43F9e390453Ae",
         "kind": "NonProxy",
         "bytecodeHash": "a3519b3a4164fa8906ad4e0afd1fe543f1505cdb674b2f1640975a6f24ba3ee6"
+      },
+      {
+        "address": "0xBc76eC6b1A0317d06d6541b0bfCCCD892762Fb1d",
+        "kind": "NonProxy",
+        "bytecodeHash": "45af005e4f6bb7fb3820dcd3970989ea457d033f7d7a2886d633a08127bb1862"
+      },
+      {
+        "address": "0x16B514C88242D96D635C20883682A54c406f61d0",
+        "kind": "NonProxy",
+        "bytecodeHash": "4b586abca11b45480b25551a398342b9de90bc35927e137e0a90793f22ae08ee"
       }
     ],
     "crowdsale-v1/OWLToken": [
