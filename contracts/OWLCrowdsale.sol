@@ -71,9 +71,8 @@ contract OWLCrowdsale is CappedCrowdsale, PostDeliveryCrowdsale {
             "OWLCrowdsale: can only send liquidity once sale has concluded"
         );
 
-        // TODO: Add proper values
         // Quantity of ETH to add
-        uint256 amountEthForUniswap = 1000 ether;
+        uint256 amountEthForUniswap = 1047 ether;
         // Quantity of OWL to add
         uint256 amountOwlForUniswap = 1000000000;
 
