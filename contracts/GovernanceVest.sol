@@ -1,8 +1,8 @@
 pragma solidity ^0.5.0;
 
-import "./contracts/token/ERC20/ERC20.sol";
-import "./contracts/token/ERC20/IERC20.sol";
-import "./contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 // Governance tokens unlocked on 11/08/2020 @ 12:00am (UTC)
 contract GovernanceVesting is ReentrancyGuard {
