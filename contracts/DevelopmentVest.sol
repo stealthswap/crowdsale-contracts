@@ -32,7 +32,7 @@ contract DevelopmentVesting is ReentrancyGuard {
 
     constructor(IERC20 _Token, address _dev1, address _dev2, address _dev3) public {
         Token = _Token;
-        
+
         dev1 = _dev1;
         dev2 = _dev2;
         dev3 = _dev3;
