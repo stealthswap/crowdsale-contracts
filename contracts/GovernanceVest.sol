@@ -15,11 +15,13 @@ contract GovernanceVesting is ReentrancyGuard {
 
     uint256 public unlockDate = 1604793600; // 11/08/2020 @ 12:00am (UTC)
 
+    uint256 public governanceFunds = 500000000000000000000000;
+
     bool Withdrawn = false;
 
     constructor(IERC20 _Token, address _govAddress) public {
         Token = _Token;
-        
+
         governanceAddress = _govAddress;
      }
 
@@ -27,7 +29,7 @@ contract GovernanceVesting is ReentrancyGuard {
         require(msg.sender == governanceAddress, "You are not a dev address");
         require(now >= unlockDate, "Can't withdraw before 11/08/2020 @ 12:00am (UTC)");
         require(Withdrawn == false, "Already withdrawn.");
-        IERC20(Token).transfer(governanceAddress, 500000000000000000000000);
+        IERC20(Token).transfer(governanceAddress, governanceFunds);
         Withdrawn = true;
     }
 }
