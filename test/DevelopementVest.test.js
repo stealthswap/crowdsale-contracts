@@ -15,17 +15,21 @@ describe('DevelopementVest', function () {
 
     const vestAmount = ether('1000000');
 
-    unlockDate1 = new BN('1609459200');
-    unlockDate2 = new BN('1617235200');
-    unlockDate3 = new BN('1625097600');
-    unlockDate4 = new BN('1633046400');
+    const unlockDate1 = new BN('1609459200');
+    const unlockDate2 = new BN('1617235200');
+    const unlockDate3 = new BN('1625097600');
+    const unlockDate4 = new BN('1633046400');
+
+    const devShares1 = new BN('62500000000000000000000');
+    const devShares2 = new BN('93750000000000000000000');
+    const devShares3 = new BN('93750000000000000000000');
 
     before(async function () {
       // Advance to the next block to correctly read time in the solidity "now" function interpreted by ganache
       await time.advanceBlock();
     });
 
-    beforeEach(async function () {
+    before(async function () {
       this.token = await Token.new();
       this.vesting = await DevelopmentVest.new(
         this.token.address, team1, team2, team3
@@ -60,7 +64,16 @@ describe('DevelopementVest', function () {
       it('should accept and reject double Q1 withdrawals', async function () {
         await this.vesting.withdrawQ1({ from: team1 });
         await expectRevert(this.vesting.withdrawQ1({ from: team1}), 'Developers have already withdrawn.');
-      });
+
+        const balanceDev1 = await this.token.balanceOf(team1);
+        const balanceDev2 = await this.token.balanceOf(team2);
+        const balanceDev3 = await this.token.balanceOf(team3);
+
+        expect(balanceDev1.toString()).equal(devShares1.toString());
+        expect(balanceDev2.toString()).equal(devShares2.toString());
+        expect(balanceDev3.toString()).equal(devShares3.toString());
+
+    });
 
     });
     context('after second quarter', function () {
@@ -71,7 +84,15 @@ describe('DevelopementVest', function () {
       it('should accept and reject double Q2 withdrawals', async function () {
         await this.vesting.withdrawQ2({ from: team2 });
         await expectRevert(this.vesting.withdrawQ2({ from: team1}), 'Developers have already withdrawn.');
-      });
+
+        const balanceDev1 = await this.token.balanceOf(team1);
+        const balanceDev2 = await this.token.balanceOf(team2);
+        const balanceDev3 = await this.token.balanceOf(team3);
+
+        expect(balanceDev1.toString()).equal(devShares1.add(devShares1).toString());
+        expect(balanceDev2.toString()).equal(devShares2.add(devShares2).toString());
+        expect(balanceDev3.toString()).equal(devShares3.add(devShares3).toString());
+        });
 
     });
     context('after third quarter', function () {
@@ -82,7 +103,16 @@ describe('DevelopementVest', function () {
       it('should accept and reject double Q3 withdrawals', async function () {
         await this.vesting.withdrawQ3({ from: team1 });
         await expectRevert(this.vesting.withdrawQ3({ from: team1}), 'Developers have already withdrawn.');
-      });
+
+
+        const balanceDev1 = await this.token.balanceOf(team1);
+        const balanceDev2 = await this.token.balanceOf(team2);
+        const balanceDev3 = await this.token.balanceOf(team3);
+
+        expect(balanceDev1.toString()).equal(devShares1.mul(new BN('3')).toString());
+        expect(balanceDev2.toString()).equal(devShares2.mul(new BN('3')).toString());
+        expect(balanceDev3.toString()).equal(devShares3.mul(new BN('3')).toString());
+        });
 
     });
     context('after fourth quarter', function () {
@@ -95,7 +125,16 @@ describe('DevelopementVest', function () {
       it('should accept and reject double Q4 withdrawals', async function () {
         await this.vesting.withdrawQ4({ from: team3 });
         await expectRevert(this.vesting.withdrawQ4({ from: team1}), 'Developers have already withdrawn.');
-      });
+
+
+        const balanceDev1 = await this.token.balanceOf(team1);
+        const balanceDev2 = await this.token.balanceOf(team2);
+        const balanceDev3 = await this.token.balanceOf(team3);
+
+        expect(balanceDev1.toString()).equal(devShares1.mul(new BN('4')).toString());
+        expect(balanceDev2.toString()).equal(devShares2.mul(new BN('4')).toString());
+        expect(balanceDev3.toString()).equal(devShares3.mul(new BN('4')).toString());
+        });
 
     });
   });
