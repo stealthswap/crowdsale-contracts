@@ -62,6 +62,7 @@ describe('DevelopementVest', function () {
 
 
       it('should accept and reject double Q1 withdrawals', async function () {
+        await expectRevert(this.vesting.withdrawQ1({ from: attacker}), 'You are not a dev address.');
         await this.vesting.withdrawQ1({ from: team1 });
         await expectRevert(this.vesting.withdrawQ1({ from: team1}), 'Developers have already withdrawn.');
 
@@ -82,6 +83,7 @@ describe('DevelopementVest', function () {
         await time.increaseTo(unlockDate2);
       });
       it('should accept and reject double Q2 withdrawals', async function () {
+        await expectRevert(this.vesting.withdrawQ2({ from: attacker}), 'You are not a dev address.');
         await this.vesting.withdrawQ2({ from: team2 });
         await expectRevert(this.vesting.withdrawQ2({ from: team1}), 'Developers have already withdrawn.');
 
@@ -101,6 +103,7 @@ describe('DevelopementVest', function () {
         await time.increaseTo(unlockDate3);
       });
       it('should accept and reject double Q3 withdrawals', async function () {
+        await expectRevert(this.vesting.withdrawQ3({ from: attacker}), 'You are not a dev address.');
         await this.vesting.withdrawQ3({ from: team1 });
         await expectRevert(this.vesting.withdrawQ3({ from: team1}), 'Developers have already withdrawn.');
 
@@ -123,6 +126,7 @@ describe('DevelopementVest', function () {
 
 
       it('should accept and reject double Q4 withdrawals', async function () {
+        await expectRevert(this.vesting.withdrawQ4({ from: attacker}), 'You are not a dev address.');
         await this.vesting.withdrawQ4({ from: team3 });
         await expectRevert(this.vesting.withdrawQ4({ from: team1}), 'Developers have already withdrawn.');
 
